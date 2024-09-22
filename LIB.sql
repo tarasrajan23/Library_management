@@ -1,292 +1,392 @@
+/*creating new database with the name Lib_mngmt_system*/
 
-CREATE DATABASE db_Library;
-SHOW DATABASES;
-USE db_library;
-	CREATE TABLE tbl_publisher (
-		publisher_PublisherName VARCHAR(100) PRIMARY KEY NOT NULL,
-		publisher_PublisherAddress VARCHAR(200) NOT NULL,
-		publisher_PublisherPhone VARCHAR(50) NOT NULL
-	);
-    
-	INSERT INTO tbl_publisher
-		(publisher_PublisherName, publisher_PublisherAddress, publisher_PublisherPhone)
-		VALUES
-		('DAW Books','375 Hudson Street, New York, NY 10014','212-366-2000'),
-		('Viking','375 Hudson Street, New York, NY 10014','212-366-2000'),
-		('Signet Books','375 Hudson Street, New York, NY 10014','212-366-2000'),
-		('Chilton Books','Not Available','Not Available'),
-		('George Allen & Unwin','83 Alexander Ln, Crows Nest NSW 2065, Australia','+61-2-8425-0100'),
-		('Alfred A. Knopf','The Knopf Doubleday Group Domestic Rights, 1745 Broadway, New York, NY 10019','212-940-7390'),		
-		('Bloomsbury','Bloomsbury Publishing Inc., 1385 Broadway, 5th Floor, New York, NY 10018','212-419-5300'),
-		('Shinchosa','Oga Bldg. 8, 2-5-4 Sarugaku-cho, Chiyoda-ku, Tokyo 101-0064 Japan','+81-3-5577-6507'),
-		('Harper and Row','HarperCollins Publishers, 195 Broadway, New York, NY 10007','212-207-7000'),
-		('Pan Books','175 Fifth Avenue, New York, NY 10010','646-307-5745'),
-		('Chalto & Windus','375 Hudson Street, New York, NY 10014','212-366-2000'),
-		('Harcourt Brace Jovanovich','3 Park Ave, New York, NY 10016','212-420-5800'),
-		('W.W. Norton',' W. W. Norton & Company, Inc., 500 Fifth Avenue, New York, New York 10110','212-354-5500'),
-		('Scholastic','557 Broadway, New York, NY 10012','800-724-6527'),
-		('Bantam','375 Hudson Street, New York, NY 10014','212-366-2000'),
-		('Picador USA','175 Fifth Avenue, New York, NY 10010','646-307-5745')		
-	;
-SELECT * FROM tbl_publisher;
+create database lib_mngmt_system
 
-	CREATE TABLE tbl_book (
-		book_BookID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-		book_Title VARCHAR(100) NOT NULL,
-		book_PublisherName VARCHAR(100) NOT NULL,
-        FOREIGN KEY (book_PublisherName) REFERENCES tbl_publisher(publisher_PublisherName) ON UPDATE CASCADE ON DELETE CASCADE
-	);
-INSERT INTO tbl_book
-		(book_Title, book_PublisherName)
-		VALUES 
-		('The Name of the Wind', 'DAW Books'),
-		('It', 'Viking'),
-		('The Green Mile', 'Signet Books'),
-		('Dune', 'Chilton Books'),
-		('The Hobbit', 'George Allen & Unwin'),
-		('Eragon', 'Alfred A. Knopf'),
-		('A Wise Mans Fear', 'DAW Books'),
-		('Harry Potter and the Philosophers Stone', 'Bloomsbury'),
-		('Hard Boiled Wonderland and The End of the World', 'Shinchosa'),
-		('The Giving Tree', 'Harper and Row'),
-		('The Hitchhikers Guide to the Galaxy', 'Pan Books'),
-		('Brave New World', 'Chalto & Windus'),
-		('The Princess Bride', 'Harcourt Brace Jovanovich'),
-		('Fight Club', 'W.W. Norton'),
-		('Holes', 'Scholastic'),
-		('Harry Potter and the Chamber of Secrets', 'Bloomsbury'),
-		('Harry Potter and the Prisoner of Azkaban', 'Bloomsbury'),
-		('The Fellowship of the Ring', 'George Allen & Unwin'),
-		('A Game of Thrones', 'Bantam'),
-		('The Lost Tribe', 'Picador USA');
-SELECT * FROM tbl_book;
+use lib_mngmt_system
 
-	CREATE TABLE tbl_library_branch (
-		library_branch_BranchID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-		library_branch_BranchName VARCHAR(100) NOT NULL,
-		library_branch_BranchAddress VARCHAR(200) NOT NULL
-	);
-    
-INSERT INTO tbl_library_branch
-		(library_branch_BranchName, library_branch_BranchAddress)
-		VALUES
-		('Sharpstown','32 Corner Road, New York, NY 10012'),
-		('Central','491 3rd Street, New York, NY 10014'),
-		('Saline','40 State Street, Saline, MI 48176'),
-		('Ann Arbor','101 South University, Ann Arbor, MI 48104');
-	
-	SELECT * FROM tbl_library_branch;
 
-	CREATE TABLE tbl_borrower (
-		borrower_CardNo INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-		borrower_BorrowerName VARCHAR(100) NOT NULL,
-		borrower_BorrowerAddress VARCHAR(200) NOT NULL,
-		borrower_BorrowerPhone VARCHAR(50) NOT NULL
-	);
-INSERT INTO tbl_borrower
-		(borrower_BorrowerName, borrower_BorrowerAddress, borrower_BorrowerPhone)
-		VALUES
-		('Joe Smith','1321 4th Street, New York, NY 10014','212-312-1234'),
-		('Jane Smith','1321 4th Street, New York, NY 10014','212-931-4124'),
-		('Tom Li','981 Main Street, Ann Arbor, MI 48104','734-902-7455'),
-		('Angela Thompson','2212 Green Avenue, Ann Arbor, MI 48104','313-591-2122'),
-		('Harry Emnace','121 Park Drive, Ann Arbor, MI 48104','412-512-5522'),
-		('Tom Haverford','23 75th Street, New York, NY 10014','212-631-3418'),
-		('Haley Jackson','231 52nd Avenue New York, NY 10014','212-419-9935'),
-		('Michael Horford','653 Glen Avenue, Ann Arbor, MI 48104','734-998-1513');
-	
-	SELECT * FROM tbl_borrower;
+/*Creating new table with name tbl_category consisting of category_id & category_name*/
 
-	CREATE TABLE tbl_book_loans (
-		book_loans_LoansID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-		book_loans_BookID INT NOT NULL,
-        FOREIGN KEY (book_loans_BookID) REFERENCES tbl_book(book_BookID) ON UPDATE CASCADE ON DELETE CASCADE,
-		book_loans_BranchID INT NOT NULL,
-        FOREIGN KEY (book_loans_BranchID) REFERENCES tbl_library_branch(library_branch_BranchID) ON UPDATE CASCADE ON DELETE CASCADE,
-		book_loans_CardNo INT NOT NULL,
-        FOREIGN KEY (book_loans_CardNo) REFERENCES tbl_borrower(borrower_CardNo) ON UPDATE CASCADE ON DELETE CASCADE,
-		book_loans_DateOut VARCHAR(50) NOT NULL,
-		book_loans_DueDate VARCHAR(50) NOT NULL
-	);
-INSERT INTO tbl_book_loans
-		(book_loans_BookID, book_loans_BranchID, book_loans_CardNo, book_loans_DateOut, book_loans_DueDate)
-		VALUES
-		('1','1','1','1/1/18','2/2/18'),
-		('2','1','1','1/1/18','2/2/18'),
-		('3','1','1','1/1/18','2/2/18'),
-		('4','1','1','1/1/18','2/2/18'),
-		('5','1','3','1/3/18','2/3/18'),
-		('6','1','3','1/3/18','2/3/18'),
-		('7','1','3','1/3/18','2/3/18'),
-		('8','1','3','1/3/18','2/3/18'),
-		('9','1','3','1/3/18','2/3/18'),
-		('11','1','3','1/3/18','2/3/18'),
-		('12','2','6','12/12/17','1/12/18'),
-		('10','2','6','12/12/17','1/12/17'),
-		('20','2','6','2/3/18','3/3/18'),
-		('18','2','7','1/5/18','2/5/18'),
-		('19','2','6','1/5/18','2/5/18'),
-		('19','2','1','1/3/18','2/3/18'),
-		('11','2','7','1/7/18','2/7/18'),
-		('1','2','7','1/7/18','2/7/18'),
-		('2','2','1','1/7/18','2/7/18'),
-		('3','2','1','1/7/18','2/7/18'),
-		('5','2','6','12/12/17','1/12/18'),
-		('4','3','4','1/9/18','2/9/18'),
-		('7','3','3','1/3/18','2/3/18'),
-		('17','3','3','1/3/18','2/3/18'),
-		('16','3','5','1/3/18','2/3/18'),
-		('15','3','5','1/3/18','2/3/18'),
-		('15','3','8','1/3/18','2/3/18'),
-		('14','3','5','1/3/18','2/3/18'),
-		('13','3','8','1/3/18','2/3/18'),
-		('13','3','3','1/3/18','2/3/18'),
-		('19','3','3','12/12/17','1/12/18'),
-		('20','4','4','1/3/18','2/3/18'),
-		('1','4','3','1/12/18','2/12/18'),
-		('3','4','8','1/3/18','2/3/18'),
-		('18','4','8','1/3/18','2/3/18'),
-		('12','4','3','1/4/18','2/4/18'),
-		('11','4','4','1/15/18','2/15/18'),
-		('9','4','4','1/15/18','2/15/18'),
-		('7','4','8','1/1/18','2/2/18'),
-		('4','4','4','1/1/18','2/2/18'),
-		('1','4','4','2/2/17','3/2/18'),
-		('20','4','4','1/3/18','2/3/18'),
-		('1','4','3','1/12/18','2/12/18'),
-		('3','4','8','1/13/18','2/13/18'),
-		('18','4','8','1/13/18','2/13/18'),
-		('12','4','3','1/14/18','2/14/18'),
-		('11','4','4','1/15/18','2/15/18'),
-		('9','4','4','1/15/18','2/15/18'),
-		('7','4','8','1/19/18','2/19/18'),
-		('4','4','4','1/19/18','2/19/18'),
-		('1','4','4','1/22/18','2/22/18');
+create table tbl_category
+(
+category_id int primary key identity,
+category_name varchar(50)
+);
 
-		
-	SELECT * FROM tbl_book_loans;
-	 
-	CREATE TABLE tbl_book_copies (
-		book_copies_CopiesID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-		book_copies_BookID INT NOT NULL,
-        FOREIGN KEY (book_copies_BookID) REFERENCES tbl_book(book_BookID) ON UPDATE CASCADE ON DELETE CASCADE,
-		book_copies_BranchID INT NOT NULL,
-        FOREIGN KEY (book_copies_BranchID) REFERENCES tbl_library_branch(library_branch_BranchID) ON UPDATE CASCADE ON DELETE CASCADE,
-		book_copies_No_Of_Copies INT NOT NULL
-	);
-INSERT INTO tbl_book_copies
-		(book_copies_BookID, book_copies_BranchID, book_copies_No_Of_Copies)
-		VALUES
-		('1','1','5'),
-		('2','1','5'),
-		('3','1','5'),
-		('4','1','5'),
-		('5','1','5'),
-		('6','1','5'),
-		('7','1','5'),
-		('8','1','5'),
-		('9','1','5'),
-		('10','1','5'),
-		('11','1','5'),
-		('12','1','5'),
-		('13','1','5'),
-		('14','1','5'),
-		('15','1','5'),
-		('16','1','5'),
-		('17','1','5'),
-		('18','1','5'),
-		('19','1','5'),
-		('20','1','5'),
-		('1','2','5'),
-		('2','2','5'),
-		('3','2','5'),
-		('4','2','5'),
-		('5','2','5'),
-		('6','2','5'),
-		('7','2','5'),
-		('8','2','5'),
-		('9','2','5'),
-		('10','2','5'),
-		('11','2','5'),
-		('12','2','5'),
-		('13','2','5'),
-		('14','2','5'),
-		('15','2','5'),
-		('16','2','5'),
-		('17','2','5'),
-		('18','2','5'),
-		('19','2','5'),
-		('20','2','5'),
-		('1','3','5'),
-		('2','3','5'),
-		('3','3','5'),
-		('4','3','5'),
-		('5','3','5'),
-		('6','3','5'),
-		('7','3','5'),
-		('8','3','5'),
-		('9','3','5'),
-		('10','3','5'),
-		('11','3','5'),
-		('12','3','5'),
-		('13','3','5'),
-		('14','3','5'),
-		('15','3','5'),
-		('16','3','5'),
-		('17','3','5'),
-		('18','3','5'),
-		('19','3','5'),
-		('20','3','5'),
-		('1','4','5'),
-		('2','4','5'),
-		('3','4','5'),
-		('4','4','5'),
-		('5','4','5'),
-		('6','4','5'),
-		('7','4','5'),
-		('8','4','5'),
-		('9','4','5'),
-		('10','4','5'),
-		('11','4','5'),
-		('12','4','5'),
-		('13','4','5'),
-		('14','4','5'),
-		('15','4','5'),
-		('16','4','5'),
-		('17','4','5'),
-		('18','4','5'),
-		('19','4','5'),
-		('20','4','5');
-        
-	SELECT * FROM tbl_book_copies;
 
-	CREATE TABLE tbl_book_authors (
-		book_authors_AuthorID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-		book_authors_BookID INT NOT NULL,
-        FOREIGN KEY (book_authors_BookID) REFERENCES tbl_book(book_BookID) ON UPDATE CASCADE ON DELETE CASCADE,
-		book_authors_AuthorName VARCHAR(50) NOT NULL
-	);
-INSERT INTO tbl_book_authors
-		(book_authors_BookID,book_authors_AuthorName)
-		VALUES
-		('1','Patrick Rothfuss'),
-		('2','Stephen King'),
-		('3','Stephen King'),
-		('4','Frank Herbert'),
-		('5','J.R.R. Tolkien'),
-		('6','Christopher Paolini'),
-		('6','Patrick Rothfuss'),
-		('8','J.K. Rowling'),
-		('9','Haruki Murakami'),
-		('10','Shel Silverstein'),
-		('11','Douglas Adams'),
-		('12','Aldous Huxley'),
-		('13','William Goldman'),
-		('14','Chuck Palahniuk'),
-		('15','Louis Sachar'),
-		('16','J.K. Rowling'),
-		('17','J.K. Rowling'),
-		('18','J.R.R. Tolkien'),
-		('19','George R.R. Martin'),
-		('20','Mark Lee');
-	SELECT * FROM tbl_book_authors;
+
+/*Creating new table with name tbl_publisher consisting of publisher_id, pubisher_name, 
+publication_language & publication_type*/
+
+create table tbl_publisher
+(
+publisher_id int primary key identity,
+publisher_name varchar(50),
+publication_language varchar(15),
+publication_type varchar(20)
+);
+
+
+/*Creating new table with name tbl_location consisting of location_id, shelf_no, 
+shelf_name & floor_no*/
+
+create table tbl_location
+(
+location_id int primary key identity,
+shelf_no varchar(10),
+shelf_name varchar(50),
+floor_no int
+);
+
+
+/*Creating new table with name tbl_author consisting of author_id, first_name & last_name*/
+
+create table tbl_author
+(
+author_id int primary key identity,
+first_name varchar(20),
+last_name varchar(20)
+);
+
+
+/*Creating new table with name tbl_book consisting of book_id, isbn_code,book_title,category_id,publisher_id,
+publication year, book edition, copies_total, copies_available & location_id*/
+
+create table tbl_book
+(
+book_id int primary key identity,
+isbn_code varchar(15),
+book_title varchar(50),
+category_id int,
+publisher_id int,
+publication_year date,
+book_edition int,
+copies_total int,
+copies_available int,
+location_id int,
+
+constraint fk_category_id foreign key (category_id) references tbl_category(category_id),
+constraint fk_publisher_id foreign key (publisher_id) references tbl_publisher(publisher_id),
+constraint fk_location_id foreign key (location_id) references tbl_location(location_id)
+);
+
+
+
+/*Creating new table with name tbl_book_author consisting of book_id & author_id*/
+
+create table tbl_book_author
+(
+book_id int,
+author_id int,
+
+constraint fk_book_id foreign key (book_id) references tbl_book(book_id),
+constraint fk_author_id foreign key (author_id) references tbl_author(author_id)
+);
+
+
+/*Creating new table with name tbl_member_status consisting of active_status_id, account_type,
+account_status, membership_start_date & membership_end_date*/
+
+create table tbl_member_status
+(
+active_status_id int primary key identity,
+account_type varchar(20),
+account_status varchar(10),
+membership_start_date date,
+membership_end_date date
+);
+
+
+
+/*Creating new table with name tbl_member consisting of member_id, first_name, last_name,
+city, mobile_no, email_id, date_of_birth & active_status_id*/
+
+create table tbl_member
+(
+member_id int primary key identity,
+first_name varchar(20),
+last_name varchar(20),
+city varchar(20),
+mobile_no varchar(10),
+email_id varchar(50),
+date_of_birth date,
+active_status_id int,
+
+constraint fk_active_status_id foreign key (active_status_id) references tbl_member_status
+);
+
+
+/*Creating new table with name tbl_library_staff consisting of issue_by_id, staff_name & staff_designation*/
+
+create table tbl_library_staff
+(
+issue_by_id int primary key identity,
+staff_name varchar(50),
+staff_designation varchar(20)
+);
+
+/*Creating new table with name tbl_book_issue consisting of issue_id, book_id, member_id,
+issue_date, return_date, issue_status & issued_by_id*/
+
+create table tbl_book_issue
+(
+issue_id int primary key identity,
+book_id int,
+member_id int,
+issue_date date,
+return_date date,
+issue_status varchar(20),
+issued_by_id int,
+
+constraint fk_issue_book_id foreign key(book_id) references tbl_book,
+constraint fk_issue_member_id foreign key(member_id) references tbl_member,
+constraint fk_issue_issued_by_id foreign key(issued_by_id) references tbl_library_staff
+);
+
+
+/*Creating new table with name tbl_fine_due consisting of fine_id, member_id,
+issue_id, fine_date & fine_total*/
+
+create table tbl_fine_due
+(
+fine_id int primary key identity,
+member_id int,
+issue_id int,
+fine_date date,
+fine_total int,
+
+constraint fk_member_id foreign key(member_id) references tbl_member,
+constraint fk_issue_id foreign key(issue_id) references tbl_book_issue
+);
+
+/*Creating new table with name tbl_fine_payment consisting of fine_payment_id, member_id,
+payment_date & payment_amount*/
+
+create table tbl_fine_payment
+(
+fine_payment_id int primary key identity,
+member_id int,
+payment_date date,
+payment_amount int,
+
+constraint fk_payment_member_id foreign key(member_id) references tbl_member
+);
+
+/*Creating new table with name tbl_book_request_status consisting of available_status_id, available_status
+& nearest_available_date*/
+
+create table tbl_book_request_status
+(
+available_status_id int primary key identity,
+available_status varchar(10),
+nearest_available_date date
+);
+
+/*Creating new table with name tbl_book_request consisting of request_id, book_id, member_id,
+request_date & available_status_id*/
+
+create table tbl_book_request
+(
+request_id int primary key identity,
+book_id int,
+member_id int,
+request_date date,
+available_status_id int,
+
+constraint fk_request_book_id foreign key(book_id) references tbl_book,
+constraint fk_request_member_id foreign key(member_id) references tbl_member,
+constraint fk_request_available_status_id foreign key(available_status_id) references tbl_book_request_status
+);
+
+
+/*Insert data into table tbl_author */
+
+select * from tbl_author
+
+insert into tbl_author
+values('PK', 'Nag'), ('JP', 'Holman'), ('APJ', 'Kalam'), ('E', 'Sreedharan'),('RL', 'Norton'),
+('Amrita', 'Pritam'), ('Mahadevi', 'Verma'), ('Sudha', 'Murthy'), ('Ruskin', 'Bond'), ('Robert', 'Frost'),
+('Rabindranath', 'Tagore'), ('Jack', 'Canfield'), ('Dale', 'Carnegie'), ('Swami', 'Vivekanand'), ('Munshi', 'Premchand'),
+('Stephen', 'Covey'), ('F', 'Beer'), ('R', 'Johnston'), ('Amish', 'Tripathi'), ('Stephen', 'Timoshenko'), 
+('Anton', 'Chekhov'), ('Leo', 'Tolstoy'), ('Mahatma', 'Gandhi'), ('JL', 'Nehru'),('Nelson', 'Mandela')
+
+/*Insert data into table tbl_category */
+
+select * from tbl_category
+
+insert into tbl_category
+values('Engineering&Technology'), ('Spritualism'), ('Self_Development'), ('Literature'), ('History'), 
+('Crime'), ('Comedy'), ('Romantic'), ('Folk_Tales'), ('Fiction'), 
+('Non_Fiction'), ('Poetry'), ('Drama'), ('Adventure'), ('Mythology') 
+
+/*Insert data into table tbl_publisher */
+
+select * from tbl_publisher
+
+insert into tbl_publisher
+values('ABC','English','Journals'), ('ABC','Hindi','Journals'), 
+('CBS','English','Handbooks'), ('CBS','Hindi','Handbooks'),
+('XYZ','English','Research_Reports'), ('XYZ','Hindi','Research_Reports'),
+('XYZ','English','Books'), ('XYZ','Hindi','Books'),
+('ZAB','English','Magzines'),('ZAB','Hindi','Magzines')
+
+
+/*Insert data into table tbl_location */
+
+select * from tbl_location
+
+insert into tbl_location
+values('10001', 'Engineering_Mechanical',1), ('10001', 'Engineering_Mechanical',2), ('10001', 'Engineering_Mechanical',3),
+('10002', 'Engineering_Electrical',1), ('10002', 'Engineering_Electrical',2), ('10002', 'Engineering_Electrical',3),
+('10003', 'Engineering_Computers',1), ('10003', 'Engineering_Computers',2), ('10003', 'Engineering_Computers',3),
+('20001', 'Philosophy',1), ('20001', 'Philosophy',2),('20001', 'Philosophy',3), ('20001', 'Philosophy',4),
+('20002', 'Spritualism',1), ('20002', 'Spritualism',2), ('20002', 'Spritualism',3), ('20002', 'Spritualism',4),
+('30001', 'Self_Development',1), ('30001', 'Self_Development',2), ('30001', 'Self_Development',3),
+('30002', 'Competitions',1), ('30002', 'Competitions',2), ('30002', 'Competitions',3),
+('30003', 'Literature',1), ('30003', 'Literature',2), ('30003', 'Literature',3),('30003', 'Literature',4),
+('40001', 'Journals',1), ('40001', 'Journals',2), ('40001', 'Journals',3)
+
+
+/*Insert data into table tbl_book */
+
+select * from tbl_book
+
+insert into tbl_book
+values('9876543210001', 'Thermodynamics', 1, 7, '2016',3,15,10,1)
+('9876543210002', 'Heat & Mass Transfer', 1, 7, '2014',2,5,2,2),
+('9876543210003', 'Wings of Fire', 11, 7, '1999',1,10,5,18),
+('9876543210004', 'Kinematics of Machines', 1, 7, '2012',3,5,5,3),
+('9876543210005', 'Khaton ka Safarnama', 8, 8, '1985',1,3,3,24),
+('9876543210006', 'Black Rose', 8, 7, '1970',1,1,1,24),
+('9876543210007', 'Kagaz Te Kanvas', 8, 8, '1980',1,5,3,25),
+('9876543210008', 'Gillu', 4, 8, '1960',1,2,2,26),
+('9876543210009', 'How I taught my grandmother to read', 4, 7, '1990',1,5,5,26),
+('9876543210010', 'Three Thousand Stitches', 4, 7, '2010',1,5,5,27),
+('9876543210011', 'Wise and Otherwise', 4, 7, '2012',1,5,5,26),
+('9876543210012', 'The Room on the Roof', 4, 7, '1970',1,5,5,27),
+('9876543210013', 'Happy Birthday, World', 11, 7, '2000',1,1,1,27),
+('9876543210014', 'The Road Not Taken', 12, 7, '1920',1,1,1,24),
+('9876543210015', 'Geetanjali', 12, 7, '1920',3,1,1,25),
+('9876543210016', 'The 25 Success Principles', 3, 7, '1980',6,10,5,18)
+('9976543210002', 'How to stop worrying and start living', 3, 7, '2005',10,10,2,19),
+('9976543210003', 'Karma Yoga', 11, 7, '1980',5,2,2,11),
+('9976543210004', 'Godan', 10, 8, '2012',10,2,2,24),
+('9976543210005', 'Premashram', 10, 8, '2010',10,2,2,24),
+('9976543210006', 'The Seven Habits of Highly Effective People', 3, 7, '2000',15,10,2,20),
+('9876543210007', 'Mechanics', 1, 8, '2000',3,3,3,3),
+('9876543210008', 'The Immortals of Meluha', 15, 8, '2012',1,3,3,27),
+('9876543210009', 'Strengh of Materials', 1, 8, '2000',6,2,2,2),
+('9876543210010', 'The Seagull', 13, 8, '1960',1,1,1,27),
+('9876543210011', 'War and Peace', 13, 8, '1970',21,1,1,26),
+('9876543210012', 'Harijan', 11, 1, '1932',1,1,1,29),
+('9876543210013', 'The Story of my experiments with Truth', 11, 8, '1925',1,1,1,26),
+('9876543210014', 'The Discovery of India', 5, 8, '1945',1,3,3,24),
+('9876543210015', 'Long walk to freedom', 5, 8, '1999',1,2,2,25),
+('9876543210016', 'Beyond Religion', 2, 8, '2010',1,2,2,15),
+('9876543210017', 'Ikigai', 2, 8, '2010',1,2,0,15),
+('9976443210004', 'Gaban', 10, 8, '2012',10,2,0,24),
+('9976549210004', 'Idgah', 10, 8, '2012',10,2,0,24)
+
+select * from tbl_book_author
+
+insert into tbl_book_author
+values(1,1),(2,2),(3,3),(4,5),(5,6),(6,6),(7,6),(8,7),(9,8),(10,8),
+(11,8),(12,9),(13,9),(14,10),(15,11),(16,12),(17,13),
+(18,14),(19,15),(20,15),(21,16),(22,17),(22,18),(23,19),(24,20),
+(25,21),(26,22),(27,23),(28,23),(29,24),(30,25),(31,null)
+
+/*Insert data into table tbl_member_status */
+
+select * from tbl_member_status
+
+insert into tbl_member_status
+values('student','active','2018','2020')
+('student','active','2019','2021'),
+('student','inactive','2016','2017'),
+('student','inactive','2015','2016'),
+('professional','active','2020','2022'),
+('professional','active','2018','2022'),
+('professional','inactive','2015','2018'),
+('professional','inactive','2016','2016'),
+('staff','active','2020','2022'),
+('staff','active','2020','2022'),
+('staff','inactive','2015','2016')
+
+/*Insert data into table tbl_member*/
+
+select * from tbl_member
+
+insert into tbl_member
+values('A','Kumar','Delhi','9999999999','a@xyz.com','1996',1),
+('B','Kumar','Delhi','9999999999','b@xyz.com','1990',5),
+('C','Kumar','Noida','9999999999','c@xyz.com','2000',3),
+('A','Singh','Noida','9999999999','as@xyz.com','2002',2),
+('B','Singh','Noida','9999999999','bs@xyz.com','1985',4),
+('B','Singh','Noida','9999999999','bs@xyz.com','1985',6),
+('C','Singh','Delhi','9999999999','cs@xyz.com','1990',7),
+('X','Patel','Delhi','9999999999','x@xyz.com','1990',9),
+('Y','Arora','Delhi','9999999999','y@xyz.com','1985',10),
+('Z','Khanna','Delhi','9999999999','z@xyz.com','1970',11)
+
+/*Insert data into table tbl_library_staff*/
+
+select * from tbl_library_staff
+
+insert into tbl_library_staff
+values('X Patel', 'Librarian'),
+('Y Arora', 'Librarian'),
+('R Tiwari', 'Head Librarian')
+
+/*Insert data into table tbl_book_issue*/
+
+select * from tbl_book_issue
+
+
+insert into tbl_book_issue
+values(7, 1, '2022', '2022', 'overdue', 1),
+(8, 1, '2022-11-01', '2022-11-15', 'underdue', 1),
+(1, 2, '2022-11-10', '2022-11-25', 'underdue', 1),
+(10, 2, '2022-11-12', '2022-11-27', 'underdue', 2),
+(18, 2, '2022-11-12', '2022-11-27', 'underdue', 2),
+(2, 4, '2022-10-10', '2022-10-25', 'overrdue', 1),
+(15, 5, '2022-10-10', '2022-10-25', 'overdue', 2)
+
+/*Insert data into table tbl_fine_due*/
+
+select * from tbl_fine_due
+
+insert into tbl_fine_due
+values(5,12,'2022-11-20',25),
+(4,11,'2022-11-20',25),
+(1,6,'2022-11-20',150)
+
+/*Insert data into table tbl_fine_payment*/
+
+select * from tbl_fine_payment
+
+insert into tbl_fine_payment
+values(5,'2022-11-20',25),
+(4,'2022-11-20',25),
+(1,'2022-11-20',150)
+
+
+/*Insert data into table tbl_book_request_status*/
+
+select * from tbl_book_request_status
+
+insert into tbl_book_request_status
+values('not_avail','2022-11-22'),
+('not_avail','2022-11-30'),
+('not_avail','2022-11-25'),
+('available','2022-11-16')
+
+/*Insert data into table tbl_book_request*/
+
+select * from tbl_book_request
+
+insert into tbl_book_request
+values(33,1,'2022-11-15',3),
+(34,1,'2022-11-15',4),
+(33,2,'2022-11-15',4),
+(32,4,'2022-11-15',5),
+(25,5,'2022-11-15',6)
